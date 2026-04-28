@@ -1,0 +1,21 @@
+{
+  "name": "pixelstream-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Progressive image streaming for the modern web",
+  "license": "MIT",
+  "author": "Sage <cocacola158500@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adhub1031/pixelstream.git"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter './packages/*' build",
+    "test": "pnpm -r --filter './packages/*' test"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  },
+  "packageManager": "pnpm@9.12.3"
+}
