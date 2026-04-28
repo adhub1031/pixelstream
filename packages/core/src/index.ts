@@ -29,11 +29,20 @@ export interface LoadOptions {
   blur?: number
   /** swap 시 fade transition (ms). 기본 300 */
   transition?: number
-  /** 각 tier 로드 시 호출 — 디버깅·계측용 */
+  /**
+   * IntersectionObserver 로 뷰포트 근처일 때만 로드 시작.
+   * - `false` (기본): 즉시 로드 — above-the-fold / hero 이미지에 권장
+   * - `true`: viewport 와 200px 마진으로 lazy
+   * - 객체: rootMargin / threshold 커스터마이즈
+   */
+  lazy?: boolean | IntersectionObserverInit
+  /** 로드 실패 시 사용할 fallback URL. 설정하면 onError 보다 우선 적용 */
+  fallback?: string
+  /** 각 tier 로드 시 호출 — 디버깅·계측용 (tier=0 은 원본) */
   onTierLoad?: (tier: number, url: string) => void
   /** 마지막 tier (또는 원본) 로드 후 호출 */
   onComplete?: () => void
-  /** 로드 실패 시 호출 — fallback 처리 등 */
+  /** 로드 실패 시 호출 — fallback 이 없을 때만 */
   onError?: (error: Error) => void
   /** AbortSignal 로 중간 취소 */
   signal?: AbortSignal
@@ -41,6 +50,7 @@ export interface LoadOptions {
 
 const DEFAULT_BLUR_PX = 8
 const DEFAULT_TRANSITION_MS = 300
+const DEFAULT_LAZY_ROOT_MARGIN = "200px"
 
 /**
  * `<img>` 요소를 progressive 로 로드한다.
@@ -50,7 +60,10 @@ const DEFAULT_TRANSITION_MS = 300
  * import { loadProgressive } from '@pixelstream/core'
  *
  * const img = document.querySelector('img')!
- * await loadProgressive(img, '/images/photo.jpg', { preset: 'static' })
+ * await loadProgressive(img, '/images/photo.jpg', {
+ *   preset: 'static',
+ *   lazy: true,
+ * })
  * ```
  */
 export async function loadProgressive(
@@ -64,6 +77,8 @@ export async function loadProgressive(
     loadOriginal = true,
     blur = DEFAULT_BLUR_PX,
     transition = DEFAULT_TRANSITION_MS,
+    lazy = false,
+    fallback,
     onTierLoad,
     onComplete,
     onError,
@@ -72,10 +87,31 @@ export async function loadProgressive(
 
   if (signal?.aborted) return
 
+  // Lazy: viewport 진입까지 대기
+  if (lazy) {
+    try {
+      await waitInViewport(
+        img,
+        typeof lazy === "object" ? lazy : { rootMargin: DEFAULT_LAZY_ROOT_MARGIN },
+        signal,
+      )
+    } catch {
+      // IntersectionObserver 없는 환경이면 즉시 진행
+    }
+    if (signal?.aborted) return
+  }
+
   try {
     const transformer = resolveTransformer(preset)
 
-    // 트랜지션 셋업 (한 번만)
+    // 모던 브라우저 힌트 (없는 곳에선 무시됨).
+    // `decoding` 의 기본값은 "auto" — caller 가 명시적으로 sync/async 를
+    // 지정한 경우엔 존중하고, 그렇지 않을 때만 async 로 세팅한다.
+    const currentDecoding = img.decoding
+    if (!currentDecoding || currentDecoding === "auto") {
+      img.decoding = "async"
+    }
+
     img.style.transition = `filter ${transition}ms ease-out`
 
     // 첫 tier — 즉시 블러 적용
@@ -102,18 +138,55 @@ export async function loadProgressive(
       onTierLoad?.(0, src) // tier=0 = 원본 표식
     }
 
-    // 블러 제거 — 가장 큰 사이즈 자리 잡은 후
+    // 블러 제거
     img.style.filter = "none"
     onComplete?.()
   } catch (err) {
     if (signal?.aborted) return
     const error = err instanceof Error ? err : new Error(String(err))
-    if (onError) {
+    if (fallback) {
+      img.src = fallback
+      img.style.filter = "none"
+    } else if (onError) {
       onError(error)
     } else {
       throw error
     }
   }
+}
+
+/**
+ * IntersectionObserver 로 element 가 뷰포트 근처(또는 안)에 들어올 때까지 대기.
+ * 미지원 환경에선 reject 하므로 caller 가 fallback 처리.
+ */
+function waitInViewport(
+  el: Element,
+  init: IntersectionObserverInit,
+  signal?: AbortSignal,
+): Promise<void> {
+  if (typeof IntersectionObserver === "undefined") {
+    return Promise.reject(new Error("IntersectionObserver unavailable"))
+  }
+  return new Promise((resolve) => {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          observer.disconnect()
+          resolve()
+          return
+        }
+      }
+    }, init)
+    observer.observe(el)
+    signal?.addEventListener(
+      "abort",
+      () => {
+        observer.disconnect()
+        resolve()
+      },
+      { once: true },
+    )
+  })
 }
 
 /**
@@ -136,7 +209,7 @@ function waitImage(
     }
     const onAbort = () => {
       cleanup()
-      resolve() // abort 는 reject 가 아니라 silent return
+      resolve() // abort 는 silent return
     }
     const cleanup = () => {
       img.removeEventListener("load", onLoad)
@@ -158,7 +231,7 @@ function preloadImage(url: string, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
     const i = new Image()
     const onAbort = () => {
-      i.src = "" // 일부 브라우저에서 fetch 취소 효과
+      i.src = ""
       resolve()
     }
     i.onload = () => {

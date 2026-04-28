@@ -46,6 +46,7 @@ PixelStream does **none** of those. It uses URL-based resize parameters that **y
 | --- | --- |
 | [`@pixelstream/core`](./packages/core) | Framework-agnostic `loadProgressive(img, src, options)` |
 | [`@pixelstream/react`](./packages/react) | `<PixelImage />` React component |
+| [`@pixelstream/element`](./packages/element) | `<pixel-image>` vanilla Web Component |
 | [`@pixelstream/cli`](./packages/cli) | Build-time `pixelstream encode` for static hosting |
 
 ---
@@ -108,7 +109,22 @@ import { PixelImage } from '@pixelstream/react'
 />
 ```
 
-### Vanilla JS
+### Vanilla Web Component (any framework, no framework, plain HTML)
+
+```html
+<script type="module">
+  import '@pixelstream/element'
+</script>
+
+<pixel-image
+  src="/images/photo.jpg"
+  preset="static"
+  alt="..."
+  lazy
+></pixel-image>
+```
+
+### Vanilla JS (imperative)
 
 ```ts
 import { loadProgressive } from '@pixelstream/core'
@@ -119,6 +135,7 @@ await loadProgressive(img, '/images/photo.jpg', {
   tiers: [64, 256, 1024],
   blur: 8,
   transition: 300,
+  lazy: true,
 })
 ```
 
@@ -133,6 +150,8 @@ interface LoadOptions {
   loadOriginal?: boolean         // default true (load full-resolution as last step)
   blur?: number                  // default 8 (CSS blur on first tier)
   transition?: number            // default 300 ms
+  lazy?: boolean | IntersectionObserverInit  // default false; true = wait for viewport entry (200px margin)
+  fallback?: string              // URL to use if any tier fails to load
   onTierLoad?: (tier: number, url: string) => void
   onComplete?: () => void
   onError?: (error: Error) => void

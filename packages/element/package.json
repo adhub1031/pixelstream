@@ -1,0 +1,48 @@
+{
+  "name": "@pixelstream/element",
+  "version": "0.1.0",
+  "description": "Vanilla Web Component <pixel-image> for progressive image streaming",
+  "license": "MIT",
+  "author": "Sage <cocacola158500@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adhub1031/pixelstream.git",
+    "directory": "packages/element"
+  },
+  "keywords": [
+    "image",
+    "progressive",
+    "web-component",
+    "custom-element",
+    "vanilla"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@pixelstream/core": "workspace:^"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}

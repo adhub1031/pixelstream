@@ -173,4 +173,118 @@ describe("loadProgressive", () => {
 
     expect(custom).toHaveBeenCalledWith("/images/photo.jpg", 64)
   })
+
+  it("sets decoding=async automatically when not set", async () => {
+    const img = document.createElement("img")
+    await loadProgressive(img, "/images/photo.jpg", {
+      preset: "static",
+      tiers: [64],
+      loadOriginal: false,
+    })
+    expect(img.decoding).toBe("async")
+  })
+
+  it("respects existing decoding attribute (no override)", async () => {
+    const img = document.createElement("img")
+    img.decoding = "sync"
+    await loadProgressive(img, "/images/photo.jpg", {
+      preset: "static",
+      tiers: [64],
+      loadOriginal: false,
+    })
+    expect(img.decoding).toBe("sync")
+  })
+
+  it("falls back to fallback URL on load error", async () => {
+    // ImageElement.src setter 에서 onerror 발사하도록 임시 패치
+    const origDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLImageElement.prototype,
+      "src",
+    )
+    Object.defineProperty(HTMLImageElement.prototype, "src", {
+      configurable: true,
+      set(this: HTMLImageElement, value: string) {
+        this.setAttribute("src", value)
+        // 첫 tier 만 에러로 시뮬레이션
+        if (value.includes("@64w")) {
+          Promise.resolve().then(() => {
+            this.dispatchEvent(new Event("error"))
+          })
+        } else {
+          // fallback URL 은 정상 로드
+          Object.defineProperty(this, "complete", {
+            configurable: true,
+            get: () => true,
+          })
+          Object.defineProperty(this, "naturalWidth", {
+            configurable: true,
+            get: () => 100,
+          })
+          Promise.resolve().then(() => {
+            this.dispatchEvent(new Event("load"))
+          })
+        }
+      },
+      get() {
+        return this.getAttribute("src") ?? ""
+      },
+    })
+
+    try {
+      const img = document.createElement("img")
+      await loadProgressive(img, "/images/photo.jpg", {
+        preset: "static",
+        tiers: [64],
+        loadOriginal: false,
+        fallback: "/placeholder.jpg",
+      })
+      expect(img.src).toContain("/placeholder.jpg")
+      expect(img.style.filter).toBe("none")
+    } finally {
+      if (origDescriptor) {
+        Object.defineProperty(HTMLImageElement.prototype, "src", origDescriptor)
+      }
+    }
+  })
+
+  it("lazy=true defers load until viewport entry (mocked IntersectionObserver)", async () => {
+    // jsdom 에 IntersectionObserver 가 없을 수 있어서 직접 mock
+    let trigger: ((entries: IntersectionObserverEntry[]) => void) | null = null
+    const origIO = (global as { IntersectionObserver?: unknown }).IntersectionObserver
+    class MockIO {
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+      takeRecords() {
+        return []
+      }
+      constructor(callback: (entries: IntersectionObserverEntry[]) => void) {
+        trigger = callback
+      }
+    }
+    ;(global as { IntersectionObserver: unknown }).IntersectionObserver = MockIO
+
+    try {
+      const img = document.createElement("img")
+      const onTier = vi.fn()
+      const promise = loadProgressive(img, "/images/photo.jpg", {
+        preset: "static",
+        tiers: [64],
+        loadOriginal: false,
+        lazy: true,
+        onTierLoad: onTier,
+      })
+
+      // 아직 viewport 미진입 → 로드 시작 X
+      await new Promise((r) => setTimeout(r, 10))
+      expect(onTier).not.toHaveBeenCalled()
+
+      // viewport 진입 시뮬레이션
+      trigger?.([{ isIntersecting: true } as IntersectionObserverEntry])
+      await promise
+      expect(onTier).toHaveBeenCalled()
+    } finally {
+      ;(global as { IntersectionObserver: unknown }).IntersectionObserver = origIO
+    }
+  })
 })

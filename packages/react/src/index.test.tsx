@@ -121,4 +121,36 @@ describe("<PixelImage />", () => {
     await new Promise((r) => setTimeout(r, 30))
     expect(done).toBe(true)
   })
+
+  it("applies aspectRatio prop as CSS", () => {
+    const { container } = render(
+      <PixelImage src="/photo.jpg" alt="t" aspectRatio="16/9" />,
+    )
+    const img = container.querySelector("img")
+    // 브라우저는 "16 / 9" 로 normalize, jsdom 은 "16/9" 그대로 — 둘 다 허용
+    expect(img?.style.aspectRatio?.replace(/\s+/g, "")).toBe("16/9")
+  })
+
+  it("aspectRatio number is stringified", () => {
+    const { container } = render(
+      <PixelImage src="/photo.jpg" alt="t" aspectRatio={1.5} />,
+    )
+    const img = container.querySelector("img")
+    // jsdom 은 일부 CSS 값을 normalize 할 수 있음 — 1.5 가 문자열로만 들어가면 OK
+    expect(img?.style.aspectRatio).toContain("1.5")
+  })
+
+  it("preserves user-provided style alongside aspectRatio", () => {
+    const { container } = render(
+      <PixelImage
+        src="/photo.jpg"
+        alt="t"
+        aspectRatio="4/3"
+        style={{ width: "100%" }}
+      />,
+    )
+    const img = container.querySelector("img")
+    expect(img?.style.width).toBe("100%")
+    expect(img?.style.aspectRatio?.replace(/\s+/g, "")).toBe("4/3")
+  })
 })
