@@ -2,6 +2,8 @@
 
 > **Progressive image streaming for the modern web.** Zero server, drop-in NPM library.
 
+![PixelStream filmstrip — four loading stages from blurred 64px to sharp original](./docs/filmstrip.png)
+
 ```bash
 npm install @pixelstream/react
 ```
@@ -163,6 +165,8 @@ interface LoadOptions {
 
 ## How it works
 
+![PixelStream rendered hero in browser](./docs/loaded.png)
+
 ```
 [Browser]                       [CDN / Static host]
    │
@@ -180,6 +184,19 @@ interface LoadOptions {
 ```
 
 The browser caches each tier independently. On revisit / scroll-back, the same image renders instantly from cache.
+
+### Verified end-to-end
+
+The screenshot above is real Chromium rendering with `loadProgressive` actually swapping the `<img>` element through four tiers. Tier load timeline from the same run:
+
+```
+[0ms]  start
+[2ms]  tier=64   url=/hero@64w.jpg     0.6 KB
+[4ms]  tier=256  url=/hero@256w.jpg    2.7 KB
+[5ms]  tier=1024 url=/hero@1024w.jpg  15.4 KB
+[7ms]  tier=0    url=/hero.jpg        80.0 KB (original)
+[7ms]  complete
+```
 
 ---
 

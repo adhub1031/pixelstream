@@ -20,3 +20,4 @@ coverage/
 
 # Test
 **/coverage/
+.verify/
