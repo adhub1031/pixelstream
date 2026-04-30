@@ -1,9 +1,9 @@
 /**
- * @pixelstream/element — Vanilla `<pixel-image>` Web Component.
+ * @cn2kcorp/pixelstream-element — Vanilla `<pixel-image>` Web Component.
  *
  * 사용법:
  * ```html
- * <script type="module" src="https://unpkg.com/@pixelstream/element"></script>
+ * <script type="module" src="https://unpkg.com/@cn2kcorp/pixelstream-element"></script>
  *
  * <pixel-image
  *   src="https://res.cloudinary.com/x/upload/v1/photo.jpg"
@@ -21,7 +21,7 @@ import {
   loadProgressive,
   type LoadOptions,
   type PresetOrTransformer,
-} from "@pixelstream/core"
+} from "@cn2kcorp/pixelstream-core"
 
 const TAG_NAME = "pixel-image"
 

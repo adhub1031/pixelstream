@@ -1,14 +1,14 @@
-# @pixelstream/element
+# @cn2kcorp/pixelstream-element
 
 Vanilla `<pixel-image>` Web Component for [PixelStream](https://github.com/adhub1031/pixelstream) progressive image streaming. Drop into any HTML page — no React, Vue, or build step required.
 
 ```bash
-npm install @pixelstream/element
+npm install @cn2kcorp/pixelstream-element
 ```
 
 ```html
 <script type="module">
-  import '@pixelstream/element'
+  import '@cn2kcorp/pixelstream-element'
 </script>
 
 <pixel-image
@@ -22,7 +22,7 @@ npm install @pixelstream/element
 Or via CDN (no install):
 
 ```html
-<script type="module" src="https://unpkg.com/@pixelstream/element"></script>
+<script type="module" src="https://unpkg.com/@cn2kcorp/pixelstream-element"></script>
 <pixel-image src="/images/photo.jpg" preset="static" alt="..."></pixel-image>
 ```
 

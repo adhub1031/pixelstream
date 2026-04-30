@@ -5,11 +5,11 @@
 ![PixelStream filmstrip — four loading stages from blurred 64px to sharp original](./docs/filmstrip.png)
 
 ```bash
-npm install @pixelstream/react
+npm install @cn2kcorp/pixelstream-react
 ```
 
 ```tsx
-import { PixelImage } from '@pixelstream/react'
+import { PixelImage } from '@cn2kcorp/pixelstream-react'
 
 <PixelImage
   src="https://res.cloudinary.com/x/image/upload/v1/photo.jpg"
@@ -46,10 +46,10 @@ PixelStream does **none** of those. It uses URL-based resize parameters that **y
 
 | Package | What it is |
 | --- | --- |
-| [`@pixelstream/core`](./packages/core) | Framework-agnostic `loadProgressive(img, src, options)` |
-| [`@pixelstream/react`](./packages/react) | `<PixelImage />` React component |
-| [`@pixelstream/element`](./packages/element) | `<pixel-image>` vanilla Web Component |
-| [`@pixelstream/cli`](./packages/cli) | Build-time `pixelstream encode` for static hosting |
+| [`@cn2kcorp/pixelstream-core`](./packages/core) | Framework-agnostic `loadProgressive(img, src, options)` |
+| [`@cn2kcorp/pixelstream-react`](./packages/react) | `<PixelImage />` React component |
+| [`@cn2kcorp/pixelstream-element`](./packages/element) | `<pixel-image>` vanilla Web Component |
+| [`@cn2kcorp/pixelstream-cli`](./packages/cli) | Build-time `pixelstream encode` for static hosting |
 
 ---
 
@@ -58,7 +58,7 @@ PixelStream does **none** of those. It uses URL-based resize parameters that **y
 ### React (any CDN)
 
 ```tsx
-import { PixelImage } from '@pixelstream/react'
+import { PixelImage } from '@cn2kcorp/pixelstream-react'
 
 // Cloudinary
 <PixelImage
@@ -96,7 +96,7 @@ npx pixelstream encode public/images
 ```
 
 ```tsx
-import { PixelImage } from '@pixelstream/react'
+import { PixelImage } from '@cn2kcorp/pixelstream-react'
 
 <PixelImage src="/images/photo.jpg" preset="static" alt="..." />
 ```
@@ -115,7 +115,7 @@ import { PixelImage } from '@pixelstream/react'
 
 ```html
 <script type="module">
-  import '@pixelstream/element'
+  import '@cn2kcorp/pixelstream-element'
 </script>
 
 <pixel-image
@@ -129,7 +129,7 @@ import { PixelImage } from '@pixelstream/react'
 ### Vanilla JS (imperative)
 
 ```ts
-import { loadProgressive } from '@pixelstream/core'
+import { loadProgressive } from '@cn2kcorp/pixelstream-core'
 
 const img = document.querySelector('img.lazy')!
 await loadProgressive(img, '/images/photo.jpg', {

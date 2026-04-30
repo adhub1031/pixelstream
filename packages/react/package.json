@@ -1,6 +1,9 @@
 {
-  "name": "@pixelstream/react",
+  "name": "@cn2kcorp/pixelstream-react",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "React component for progressive image streaming",
   "license": "MIT",
   "author": "Sage <cocacola158500@gmail.com>",
@@ -38,7 +41,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@pixelstream/core": "workspace:^"
+    "@cn2kcorp/pixelstream-core": "workspace:^"
   },
   "peerDependencies": {
     "react": ">=17"

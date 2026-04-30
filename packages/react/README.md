@@ -1,13 +1,13 @@
-# @pixelstream/react
+# @cn2kcorp/pixelstream-react
 
 React component wrapper for [PixelStream](https://github.com/adhub1031/pixelstream) progressive image streaming.
 
 ```bash
-npm install @pixelstream/react
+npm install @cn2kcorp/pixelstream-react
 ```
 
 ```tsx
-import { PixelImage } from '@pixelstream/react'
+import { PixelImage } from '@cn2kcorp/pixelstream-react'
 
 <PixelImage
   src="https://res.cloudinary.com/x/image/upload/v1/photo.jpg"

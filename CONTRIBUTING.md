@@ -16,7 +16,7 @@ You'll need:
 
 - Node.js 18+
 - pnpm 9+
-- macOS / Linux / WSL (for `sharp` native bindings in `@pixelstream/cli`)
+- macOS / Linux / WSL (for `sharp` native bindings in `@cn2kcorp/pixelstream-cli`)
 
 ## Repository layout
 
@@ -57,7 +57,7 @@ Update `PresetName` and write tests in `presets.test.ts` covering: with/without 
 We currently ship React + Web Component adapters. Adapters for other frameworks (Vue, Svelte, Solid, Angular) are welcome. Pattern:
 
 - New `packages/<framework>/` directory
-- Wraps `loadProgressive` from `@pixelstream/core`
+- Wraps `loadProgressive` from `@cn2kcorp/pixelstream-core`
 - Cleans up via `AbortController` on unmount
 - Forwards standard `<img>` attributes
 - Independent tests
@@ -73,7 +73,7 @@ We currently ship React + Web Component adapters. Adapters for other frameworks 
 
 Open an issue with:
 
-1. PixelStream version (e.g., `@pixelstream/core@0.1.0`)
+1. PixelStream version (e.g., `@cn2kcorp/pixelstream-core@0.1.0`)
 2. Browser / Node.js version
 3. Minimal reproduction (CodeSandbox link or paste-able snippet)
 4. Expected vs. actual behavior

@@ -1,5 +1,5 @@
 /**
- * @pixelstream/core — Progressive image streaming for the modern web.
+ * @cn2kcorp/pixelstream-core — Progressive image streaming for the modern web.
  *
  * Pure framework-agnostic loader that swaps an `<img>` element through
  * tier widths (e.g. 64 → 256 → 1024 → original), giving instant blurry
@@ -7,7 +7,7 @@
  *
  * Works with any image CDN that supports URL-based resize (Cloudinary,
  * ImageKit, Imgix, Vercel, Supabase, Bunny, ...) or with build-time
- * generated tier files via `@pixelstream/cli`.
+ * generated tier files via `@cn2kcorp/pixelstream-cli`.
  */
 
 export { PRESETS, resolveTransformer } from "./presets.js"
@@ -57,7 +57,7 @@ const DEFAULT_LAZY_ROOT_MARGIN = "200px"
  *
  * @example
  * ```ts
- * import { loadProgressive } from '@pixelstream/core'
+ * import { loadProgressive } from '@cn2kcorp/pixelstream-core'
  *
  * const img = document.querySelector('img')!
  * await loadProgressive(img, '/images/photo.jpg', {

@@ -1,6 +1,9 @@
 {
-  "name": "@pixelstream/core",
+  "name": "@cn2kcorp/pixelstream-core",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Framework-agnostic progressive image streaming",
   "license": "MIT",
   "author": "Sage <cocacola158500@gmail.com>",

@@ -54,7 +54,7 @@ importers:
 
   packages/element:
     dependencies:
-      '@pixelstream/core':
+      '@cn2kcorp/pixelstream-core':
         specifier: workspace:^
         version: link:../core
     devDependencies:
@@ -73,7 +73,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@pixelstream/core':
+      '@cn2kcorp/pixelstream-core':
         specifier: workspace:^
         version: link:../core
     devDependencies:

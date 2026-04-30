@@ -1,7 +1,10 @@
 {
-  "name": "@pixelstream/cli",
+  "name": "@cn2kcorp/pixelstream-cli",
   "version": "0.1.0",
-  "description": "Build-time image resizer for @pixelstream/* (sharp-based)",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Build-time image resizer for @cn2kcorp/pixelstream-* (sharp-based)",
   "license": "MIT",
   "author": "Sage <cocacola158500@gmail.com>",
   "repository": {

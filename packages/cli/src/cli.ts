@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @pixelstream/cli — CLI entrypoint
+ * @cn2kcorp/pixelstream-cli — CLI entrypoint
  *
  * Usage:
  *   pixelstream encode <path>

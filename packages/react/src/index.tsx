@@ -1,5 +1,5 @@
 /**
- * @pixelstream/react — React component wrapper for progressive image streaming.
+ * @cn2kcorp/pixelstream-react — React component wrapper for progressive image streaming.
  */
 
 import {
@@ -16,15 +16,15 @@ import {
   loadProgressive,
   type LoadOptions,
   type PresetOrTransformer,
-} from "@pixelstream/core"
+} from "@cn2kcorp/pixelstream-core"
 
 export type {
   LoadOptions,
   PresetOrTransformer,
   PresetName,
   Transformer,
-} from "@pixelstream/core"
-export { PRESETS, DEFAULT_TIERS } from "@pixelstream/core"
+} from "@cn2kcorp/pixelstream-core"
+export { PRESETS, DEFAULT_TIERS } from "@cn2kcorp/pixelstream-core"
 
 export interface PixelImageProps
   extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "onError"> {
@@ -67,7 +67,7 @@ export interface PixelImageProps
  *
  * @example
  * ```tsx
- * import { PixelImage } from '@pixelstream/react'
+ * import { PixelImage } from '@cn2kcorp/pixelstream-react'
  *
  * <PixelImage src="/images/photo.jpg" alt="..." />
  *

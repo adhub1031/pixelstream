@@ -1,13 +1,13 @@
 /**
- * @pixelstream/cli — Build-time image resizer.
+ * @cn2kcorp/pixelstream-cli — Build-time image resizer.
  *
  * Generates `<name>@<width>w.<ext>` variants alongside source images so that
- * `@pixelstream/core` 의 `static` preset 이 그대로 동작하도록 한다.
+ * `@cn2kcorp/pixelstream-core` 의 `static` preset 이 그대로 동작하도록 한다.
  *
  * Programmatic API:
  *
  * ```ts
- * import { resize } from '@pixelstream/cli'
+ * import { resize } from '@cn2kcorp/pixelstream-cli'
  * await resize('src/images/photo.jpg', { tiers: [64, 256, 1024] })
  * ```
  *

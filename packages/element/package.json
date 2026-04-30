@@ -1,6 +1,9 @@
 {
-  "name": "@pixelstream/element",
+  "name": "@cn2kcorp/pixelstream-element",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Vanilla Web Component <pixel-image> for progressive image streaming",
   "license": "MIT",
   "author": "Sage <cocacola158500@gmail.com>",
@@ -37,7 +40,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@pixelstream/core": "workspace:^"
+    "@cn2kcorp/pixelstream-core": "workspace:^"
   },
   "devDependencies": {
     "jsdom": "^25.0.1",

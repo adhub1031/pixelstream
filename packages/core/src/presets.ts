@@ -78,7 +78,7 @@ export const PRESETS: Record<PresetName, Transformer> = {
   },
 
   /**
-   * Static — 빌드 타임에 생성된 파일명 규약 (`@pixelstream/cli` 가 만듦)
+   * Static — 빌드 타임에 생성된 파일명 규약 (`@cn2kcorp/pixelstream-cli` 가 만듦)
    * /images/photo.jpg → /images/photo@256w.jpg
    */
   static: (src, w) => {

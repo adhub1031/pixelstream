@@ -1,9 +1,9 @@
-# @pixelstream/cli
+# @cn2kcorp/pixelstream-cli
 
 Build-time image resizer for [PixelStream](https://github.com/adhub1031/pixelstream). Pre-generates `<name>@<width>w.<ext>` variants alongside source files so the `static` preset works with any static host.
 
 ```bash
-npm install -D @pixelstream/cli
+npm install -D @cn2kcorp/pixelstream-cli
 ```
 
 ```bash
@@ -28,7 +28,7 @@ pixelstream encode <path> [options]
 ## Programmatic API
 
 ```ts
-import { resize } from '@pixelstream/cli'
+import { resize } from '@cn2kcorp/pixelstream-cli'
 
 await resize('public/images', {
   tiers: [64, 256, 1024],
